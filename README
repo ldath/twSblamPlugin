@@ -1,0 +1,74 @@
+twSblam plugin
+======================
+
+The `twSblamPlugin` is antispam validator plugin. It uses [Sblam](http://sblam.com/ "Sblam") antispam system to validate message. 
+Is much better front line check system than Captcha. Captcha can be used as second test when SBLAM will detect propably SPAM or SPAM. 
+Second test (Captcha) can be good option if users like to add lots of links to their posts for example.
+
+Sblam project site is now only in Polish version but if someone help translate this site I think that lead developer of this project will be very happy.
+
+Instructions
+------------
+
+You can use Sblam Validator class like normal Post Validator
+
+Example
+-------
+
+### lib/form/SblamTestForm.class.php
+
+        class SblamTestForm extends sfForm {
+        	public function configure() {
+        		$this->setWidgets(array(
+        			'name'    => new sfWidgetFormInputText(),
+        			'email'   => new sfWidgetFormInputText(),
+        			'message' => new sfWidgetFormTextarea(),
+        			'www'     => new sfWidgetFormInputText(),
+        		));
+
+        		$this->widgetSchema->setNameFormat('blogpost[%s]');
+
+        		$this->setValidators(array(
+        			'name'    => new sfValidatorString(array('required' => false)),
+        			'email'   => new sfValidatorEmail(array('required' => false, 'trim' => true)),
+        			'message' => new sfValidatorString(array('min_length' => 4, 'trim' => true)),
+        			'www'     => new sfValidatorUrl(array('required' => false, 'trim' => true)),
+        		));
+
+        		$this->validatorSchema->setPostValidator(new sfValidatorSblam(array('blogpost' => array('message', 'name', 'email', 'www')), 'zwxkS5pDST8v8qdd8e', sfValidatorSblam::PROBABLY_SPAM));
+
+        	}
+        }
+
+In upper example Validator will react where SBLAm returns sfValidatorSblam::PROBABLY_SPAM or sfValidatorSblam::SPAM (result >= 1)
+
+You can chose list of types when Validator react's:
+
+        $this->validatorSchema->setPostValidator(new sfValidatorSblam(array('blogpost' => array('message', 'name', 'email', 'www')), 'zwxkS5pDST8v8qdd8e', array(sfValidatorSblam::SPAM, sfValidatorSblam::SERVER_ERROR)));
+
+Possible parameters for **sfValidatorSblam** are:
+
+ * @param array  $fieldnames  An array of fields to check
+ * @param string $apikey      Generated in http://sblam.com/key.html SBLAM apikey
+ * @param mixed  $not_valid   Level (int) or levels (array) when Validator throw not Valid error
+ * @param array  $hosts       Optionaly array of alternative SBLAM server hosts
+ * @param array  $options     An array of options
+ * @param array  $messages    An array of error messages
+
+
+### modules/testform/actions/action.class.php
+
+        class testformActions extends sfActions {
+        	public function executeIndex(sfWebRequest $request) {
+        		$this->form = new SblamTestForm();
+        		if ($request->isMethod('post')) {
+        			$this->form->bind($request->getParameter('blogpost'));
+        			if ($this->form->isValid()) {
+        				$this->redirect('testform/ok');
+        			}
+        		}
+        	}
+
+        	public function executeOk(sfWebRequest $request) {
+        	}
+        }
