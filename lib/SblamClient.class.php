@@ -6,7 +6,6 @@
  * @subpackage library
  * @author     Arkadiusz Tułodziecki
  * @author     PorneL
- * @version    SVN: $Id: SblamClient.class.php 3073 2010-03-14 12:57:18Z ldath $
  */
 class SblamClient {
 

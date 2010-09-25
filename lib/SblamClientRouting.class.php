@@ -5,7 +5,6 @@
  * @package    antispam
  * @subpackage library
  * @author     Arkadiusz Tułodziecki
- * @version    SVN: $Id: SblamClientRouting.class.php 3070 2010-03-13 22:30:57Z ldath $
  */
 class SblamClientRouting {
 	/**

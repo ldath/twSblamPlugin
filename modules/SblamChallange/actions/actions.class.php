@@ -6,7 +6,6 @@
  * @package    antispam
  * @subpackage sblamchallange
  * @author     Arkadiusz Tułodziecki
- * @version    SVN: $Id: actions.class.php 3070 2010-03-13 22:30:57Z ldath $
  */
 class SblamChallangeActions extends sfActions {
 	public function executeIndex(sfWebRequest $request) {

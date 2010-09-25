@@ -6,7 +6,6 @@
  * @package    antispam
  * @subpackage validator
  * @author     Arkadiusz Tułodziecki
- * @version    SVN: $Id: sfValidatorSblam.class.php 3073 2010-03-14 12:57:18Z ldath $
  */
 class sfValidatorSblam extends sfValidatorSchema {
 	const HAM = -2;
